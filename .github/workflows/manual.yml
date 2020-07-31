@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Manual workflow
+name: test manual
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -44,7 +44,8 @@ jobs:
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
-      commit-message: Update 3rd party
-      push-tofork: webhintio/hint
-      branch: create-pull-request/test
-      assignees: sarvaje
+      with:
+        commit-message: Update 3rd party
+        push-tofork: webhintio/hint
+        branch: create-pull-request/test
+        assignees: sarvaje
