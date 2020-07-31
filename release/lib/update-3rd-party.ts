@@ -1,9 +1,7 @@
 import * as path from 'path';
 import { promisify } from 'util';
 import * as req from 'request';
-import { debug, execa, updateFile } from './utils';
-import { Subscriber, Observable } from 'rxjs';
-import { Context } from '../@types/custom';
+import { execa, updateFile } from './utils';
 
 const request = promisify(req) as (options: req.OptionsWithUrl) => Promise<req.Response>;
 
@@ -27,7 +25,7 @@ const downloadFile = async (downloadURL: string, downloadLocation: string, trans
         // https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---exit-code
         const results = await execa(`git diff --cached --exit-code --quiet "${downloadLocation}"`);
 
-        debug(results.stdout);
+        console.log(results.stdout);
     } catch (e) {
         // There are changes to commit
         await execa(`git commit -m "Update: '${path.basename(downloadLocation)}'"`);
@@ -46,12 +44,11 @@ const resourceTransforms = new Map([
     ['packages/parser-typescript-config/src/schema.json', { pattern: 'draft-04', replacement: 'draft-07' }]
 ]);
 
-const updateEverything = async (observer: Subscriber<{}>, ctx: Context) => {
+const updateEverything = async () => {
     for (const [route, uri] of resources) {
         const message = `Updating ${route}`;
 
-        debug(message);
-        observer.next(message);
+        console.log(message);
 
         try {
             const transform = resourceTransforms.get(route);
@@ -59,20 +56,16 @@ const updateEverything = async (observer: Subscriber<{}>, ctx: Context) => {
             await downloadFile(uri, path.normalize(route), transform);
 
         } catch (e) {
-            ctx.error = e;
+            console.error(`Error downloading ${uri}`);
+            console.error(JSON.stringify(e, Object.getOwnPropertyNames(e), 2));
 
-            debug(`Error downloading ${uri}`);
-            debug(JSON.stringify(ctx.error, Object.getOwnPropertyNames(ctx.error), 2));
+            console.error(e);
 
-            return observer.error(e);
+            throw e;
         }
     }
 
-    return observer.complete();
+    return null;
 };
 
-export const updateThirdPartyResources = (ctx: Context) => {
-    return new Observable((observer) => {
-        updateEverything(observer, ctx);
-    });
-};
+updateEverything();
