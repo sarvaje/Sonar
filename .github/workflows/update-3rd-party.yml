@@ -27,8 +27,6 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-      with:
-        ref: task/action-update-3rd-party
 
     # Runs a single command using the runners shell
     - name: Install dependencies
@@ -37,7 +35,7 @@ jobs:
     - name: Linting and build scripts
       run: yarn build:scripts
 
-    - name: Test dir content
+    - name: Test dist/scripts content
       run: ls dist/scripts/ -al
 
     - name: Run 3rd party update
