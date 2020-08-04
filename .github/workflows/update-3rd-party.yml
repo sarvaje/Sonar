@@ -37,6 +37,9 @@ jobs:
     - name: Linting and build scripts
       run: yarn build:scripts
 
+    - name: Test dir content
+      run: ls dist/scripts/ -al
+
     - name: Run 3rd party update
       run: node dist/scripts/update-3rd-party.js
 
