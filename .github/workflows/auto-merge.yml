@@ -1,0 +1,30 @@
+name: 'Auto merge 3rd party'
+
+# Controls when the action will run.
+on:
+  pull_request:
+    types:
+      - labeled
+      - unlabeled
+      - synchronize
+      - opened
+      - edited
+      - ready_for_review
+      - reopened
+      - unlocked
+  check_suite:
+    types:
+      - completed
+  status: {}
+
+jobs:
+  automerge:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: automerge
+        uses: "pascalgn/automerge-action@f81beb99aef41bb55ad072857d43073fba833a98"
+        env:
+          MERGE_LABELS: "automerge,3rdparty"
+          MERGE_METHOD: rebase
+          UPDATE_LABELS: "automerge,3rdparty"
+          UPDATE_METHOD: rebase
