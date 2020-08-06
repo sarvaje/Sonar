@@ -1,9 +1,6 @@
-# This is a basic workflow to help you get started with Actions
+name: '3rd Party Updater'
 
-name: test
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the main branch
+# Controls when the action will run.
 on:
   workflow_dispatch:
     inputs:
@@ -16,19 +13,13 @@ on:
   schedule:
     - cron: '0 0 * * 6' # Run on Saturday
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-20.04
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    # Runs a single command using the runners shell
     - name: Install dependencies
       run: yarn
 
@@ -43,7 +34,6 @@ jobs:
       with:
         commit-message: 'Chore: Update 3rd party'
         branch: create-pull-request/test
-        assignees: sarvaje
         draft: false
         title: '[Action] Update 3rd party'
-        labels: automerge
+        labels:  "automerge,3rdparty"
