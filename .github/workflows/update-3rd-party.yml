@@ -20,6 +20,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Check run id
+      run: echo ${{ github.run_id }}
+
+    - name: Check run number
+      run: echo ${{ github.run_number }}
+
     - name: Install dependencies
       run: yarn
 
@@ -33,16 +39,16 @@ jobs:
       id: changes
       uses: UnicornGlobal/has-changes-action@v1.0.11
 
-    - name: Run Test
-      if: steps.changes.outputs.changed == 1
-      run: yarn test
+    # - name: Run Test
+    #   if: steps.changes.outputs.changed == 1
+    #   run: yarn test
 
     - name: Create Pull Request
       if: steps.changes.outputs.changed == 1
       uses: peter-evans/create-pull-request@v3
       with:
         commit-message: 'Chore: Update 3rd party'
-        branch: create-pull-request/test
+        branch: "create-pull-request/run-${{ github.run_id }}-${{ github.run_number}}"
         draft: false
         title: '[Action] Update 3rd party'
         labels:  "automerge,3rdparty"
@@ -50,6 +56,10 @@ jobs:
 
     - name: Merge Pull Request
       if: steps.changes.outputs.changed == 1
-      uses: maxkomarychev/merge-pal-action@v0.5.1
+      uses: squalrus/merge-bot@v0.1.0
       with:
         token: "${{ secrets.MY_TOKEN }}"
+        labels: automerge, 3rdparty
+        method: rebase
+        reviewers: false
+
