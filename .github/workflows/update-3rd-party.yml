@@ -47,7 +47,16 @@ jobs:
         title: '[Action] Update 3rd party'
         labels:  "automerge"
         token: "${{ secrets.MY_TOKEN }}"
-        body: /rebase
+
+    - name: Comment PR
+      if: steps.changes.outputs.changed == 1
+      uses: Janealter/branch-pr-comment@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_TOKEN  }}
+      with:
+        message: "/rebase"
+        branch: "create-pull-request/run-${{ github.run_id }}-${{ github.run_number}}"
+
 
     # - name: Wait a little bit
     #   run: sleep 30
