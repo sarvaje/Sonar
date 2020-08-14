@@ -1,0 +1,23 @@
+name: Automerge
+
+on:
+  pull_request:
+    types:
+      - labeled
+
+jobs:
+  autoMerge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: automerge
+        uses: buildsville/simple-merge@v1
+        id: merge
+        with:
+          token: ${{ secrets.MY_TOKEN }}
+          method: 'rebase'
+          labels: '["automerge"]'
+          title: 'commit title'
+          message: 'commit message'
+      - name: result
+        run: |
+          echo "result: ${{ steps.merge.outputs.result }}"
