@@ -20,12 +20,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Check run id
-      run: echo ${{ github.run_id }}
-
-    - name: Check run number
-      run: echo ${{ github.run_number }}
-
     - name: Install dependencies
       run: yarn
 
@@ -51,10 +45,26 @@ jobs:
         branch: "create-pull-request/run-${{ github.run_id }}-${{ github.run_number}}"
         draft: false
         title: '[Action] Update 3rd party'
-        labels:  "automerge,3rdparty"
+        labels:  "automerge"
         token: "${{ secrets.MY_TOKEN }}"
 
-    - name: Automerge
-      uses: maxkomarychev/merge-pal-action@v0.5.1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Merge Pull Request
+    #   uses: everlytic/branch-merge@1.1.0
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     source_ref: "create-pull-request/run-${{ github.run_id }}-${{ github.run_number}}"
+    #     target_branch: 'main'
+
+    # - name: Merge Pull Request
+    #   if: steps.changes.outputs.changed == 1
+    #   id: automerge
+    #   uses: buildsville/simple-merge@v1
+    #   with:
+    #     token: "${{ secrets.MY_TOKEN }}"
+    #     labels: '["automerge"]'
+    #     method: rebase
+
+    # - name: result
+    #   run: |
+    #     echo "result: ${{ steps.automerge.outputs.result }}"
+
