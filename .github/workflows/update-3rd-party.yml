@@ -54,7 +54,16 @@ jobs:
         labels:  "automerge,3rdparty"
         token: "${{ secrets.MY_TOKEN }}"
 
-    - name: Automerge
-      uses: maxkomarychev/merge-pal-action@v0.5.1
+    - name: Merge Pull Request
+      if: steps.changes.outputs.changed == 1
+      id: automerge
+      uses: buildsville/simple-merge@v1
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: "${{ secrets.MY_TOKEN }}"
+        labels: automerge, 3rdparty
+        method: rebase
+
+    - name: result
+      run: |
+        echo "result: ${{ steps.automerge.outputs.result }}"
+
