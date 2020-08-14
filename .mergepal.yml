@@ -1,4 +1,0 @@
-whitelist:
-  - automerge
-  - 3rdparty
-method: rebase
