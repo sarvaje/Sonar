@@ -48,23 +48,19 @@ jobs:
         labels:  "automerge"
         token: "${{ secrets.MY_TOKEN }}"
 
-    # - name: Merge Pull Request
-    #   uses: everlytic/branch-merge@1.1.0
-    #   with:
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
-    #     source_ref: "create-pull-request/run-${{ github.run_id }}-${{ github.run_number}}"
-    #     target_branch: 'main'
+    - name: Wait a little bit
+      run: sleep 30
 
-    # - name: Merge Pull Request
-    #   if: steps.changes.outputs.changed == 1
-    #   id: automerge
-    #   uses: buildsville/simple-merge@v1
-    #   with:
-    #     token: "${{ secrets.MY_TOKEN }}"
-    #     labels: '["automerge"]'
-    #     method: rebase
+    - name: Merge Pull Request
+      if: steps.changes.outputs.changed == 1
+      id: automerge
+      uses: buildsville/simple-merge@v1
+      with:
+        token: "${{ secrets.MY_TOKEN }}"
+        labels: '["automerge"]'
+        method: rebase
 
-    # - name: result
-    #   run: |
-    #     echo "result: ${{ steps.automerge.outputs.result }}"
+    - name: result
+      run: |
+        echo "result: ${{ steps.automerge.outputs.result }}"
 
