@@ -39,7 +39,7 @@ jobs:
 
     - name: Create Pull Request
       if: steps.changes.outputs.changed == 1
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v3.1.0
       with:
         commit-message: 'Chore: Update 3rd party'
         branch: "create-pull-request/run-${{ github.run_id }}-${{ github.run_number}}"
@@ -47,22 +47,23 @@ jobs:
         title: '[Action] Update 3rd party'
         labels:  "automerge"
         token: "${{ secrets.MY_TOKEN }}"
+        body: /rebase
 
-    - name: Wait a little bit
-      run: sleep 30
+    # - name: Wait a little bit
+    #   run: sleep 30
 
-    - name: Merge Pull Request
-      if: steps.changes.outputs.changed == 1
-      id: automerge
-      uses: buildsville/simple-merge@v1
-      with:
-        token: "${{ secrets.MY_TOKEN }}"
-        labels: '["automerge"]'
-        method: squash
-        title: "Chore: Update 3rd party merge"
-        message: "Commit message"
+    # - name: Merge Pull Request
+    #   if: steps.changes.outputs.changed == 1
+    #   id: automerge
+    #   uses: buildsville/simple-merge@v1
+    #   with:
+    #     token: "${{ secrets.MY_TOKEN }}"
+    #     labels: '["automerge"]'
+    #     method: squash
+    #     title: "Chore: Update 3rd party merge"
+    #     message: "Commit message"
 
-    - name: result
-      run: |
-        echo "result: ${{ steps.automerge.outputs.result }}"
+    # - name: result
+    #   run: |
+    #     echo "result: ${{ steps.automerge.outputs.result }}"
 
