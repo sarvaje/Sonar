@@ -14,8 +14,8 @@ on:
     - cron: '0 0 * * 6' # Run on Saturday
 
 jobs:
-  build:
-    runs-on: ubuntu-20.04
+  Update3rdParty:
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -48,14 +48,14 @@ jobs:
         labels:  "automerge"
         token: "${{ secrets.MY_TOKEN }}"
 
-    - name: Comment PR
-      if: steps.changes.outputs.changed == 1
-      uses: Janealter/branch-pr-comment@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.MY_TOKEN  }}
-      with:
-        message: "/rebase"
-        branch: "create-pull-request/run-${{ github.run_id }}-${{ github.run_number}}"
+    # - name: Comment PR
+    #   if: steps.changes.outputs.changed == 1
+    #   uses: Janealter/branch-pr-comment@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.MY_TOKEN  }}
+    #   with:
+    #     message: "/rebase"
+    #     branch: "create-pull-request/run-${{ github.run_id }}-${{ github.run_number}}"
 
 
     # - name: Wait a little bit
