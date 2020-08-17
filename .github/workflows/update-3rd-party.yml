@@ -29,13 +29,17 @@ jobs:
     - name: Run 3rd party update
       run: node dist/scripts/update-3rd-party.js
 
-    - name: Check if there are changes
+    - name: Test
       id: changes
       uses: UnicornGlobal/has-changes-action@v1.0.11
 
-    # - name: Run Test
-    #   if: steps.changes.outputs.changed == 1
-    #   run: yarn test
+    - name: Print status 2
+      run: |
+        git status
+        echo "${{steps.changes.outputs.changed}}"
+        git add .
+        echo "${{steps.changes.outputs.changed}}"
+        git status
 
     - name: Create Pull Request
       if: steps.changes.outputs.changed == 1
