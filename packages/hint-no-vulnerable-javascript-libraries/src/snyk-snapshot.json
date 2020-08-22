@@ -2056,6 +2056,59 @@
     ],
     "auth0-lock": [
       {
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N/E:U/RL:O/RC:R",
+        "alternativeIds": [],
+        "creationTime": "2020-08-20T09:27:39.056113Z",
+        "credit": [
+          "mvisat"
+        ],
+        "cvssScore": 3.7,
+        "disclosureTime": "2020-08-19T21:05:03Z",
+        "exploit": "Unproven",
+        "fixedIn": [
+          "11.26.3"
+        ],
+        "functions": [],
+        "functions_new": [],
+        "id": "SNYK-JS-AUTH0LOCK-607904",
+        "identifiers": {
+          "CVE": [
+            "CVE-2020-15119"
+          ],
+          "CWE": [
+            "CWE-79"
+          ]
+        },
+        "language": "js",
+        "modificationTime": "2020-08-20T10:03:43.562758Z",
+        "moduleName": "auth0-lock",
+        "packageManager": "npm",
+        "packageName": "auth0-lock",
+        "patches": [],
+        "publicationTime": "2020-08-20T10:03:43.325676Z",
+        "references": [
+          {
+            "title": "GitHub Additional Information",
+            "url": "https://github.com/advisories/GHSA-6gg3-pmm7-97xc"
+          },
+          {
+            "title": "GitHub Advisory",
+            "url": "https://github.com/auth0/lock/security/advisories/GHSA-6gg3-pmm7-97xc"
+          },
+          {
+            "title": "NVD",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-15119"
+          }
+        ],
+        "semver": {
+          "vulnerable": [
+            "<11.26.3"
+          ]
+        },
+        "severity": "low",
+        "title": "Cross-site Scripting (XSS)"
+      },
+      {
         "CVSSv3": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
         "alternativeIds": [],
         "creationTime": "2020-02-02T10:59:16.702674Z",
@@ -11249,7 +11302,7 @@
         "packageManager": "npm",
         "packageName": "lodash",
         "patches": [],
-        "publicationTime": "2020-07-31T13:09:06Z",
+        "publicationTime": "2020-08-16T13:09:06Z",
         "references": [
           {
             "title": "GitHub Issue",
