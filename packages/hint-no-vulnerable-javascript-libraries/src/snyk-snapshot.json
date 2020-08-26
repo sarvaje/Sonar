@@ -8207,6 +8207,7 @@
         "disclosureTime": "2020-06-11T08:30:10Z",
         "exploit": "Proof of Concept",
         "fixedIn": [
+          "7.2.2",
           "8.1.1"
         ],
         "functions": [],
@@ -8216,10 +8217,16 @@
           "CVE": [],
           "CWE": [
             "CWE-79"
+          ],
+          "GHSA": [
+            "GHSA-gr4j-r575-g665"
+          ],
+          "NSP": [
+            1227
           ]
         },
         "language": "js",
-        "modificationTime": "2020-06-11T14:38:34.090631Z",
+        "modificationTime": "2020-08-25T16:26:37.492587Z",
         "moduleName": "highcharts",
         "packageManager": "npm",
         "packageName": "highcharts",
@@ -8241,7 +8248,8 @@
         ],
         "semver": {
           "vulnerable": [
-            "<8.1.1"
+            "<7.2.2",
+            ">=8.0.0 <8.1.1"
           ]
         },
         "severity": "high",
@@ -12015,7 +12023,7 @@
           ]
         },
         "language": "js",
-        "modificationTime": "2020-06-12T14:36:41.432323Z",
+        "modificationTime": "2020-08-25T09:41:03.189638Z",
         "moduleName": "lodash",
         "packageManager": "npm",
         "packageName": "lodash",
