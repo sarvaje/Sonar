@@ -29,11 +29,12 @@ jobs:
     - name: Run 3rd party update
       run: node dist/scripts/update-3rd-party.js
 
+    - name: Add changes
+      run: hub add
+
     - name: Check Changes
       id: has-changes
       run: |
-        hub diff
-        set +e
         if hub diff --quiet; then
           echo "::set-output name=hasChanges::false"
           echo "No Changes";
@@ -41,12 +42,20 @@ jobs:
           echo "::set-output name=hasChanges::true"
           echo "Changes";
         fi
-        set -e
       env:
         GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
 
-    - name: Print
-      run: echo "${{ steps.has-changes.outputs.hasChanges }}"
+    - name: Run tests
+      id: tests
+      if: steps.has-changes.outputs.hasChanges == 'true'
+      run: |
+        if yarn test; then
+          echo "::set-output name=hasError::false"
+          echo "No Error!!"
+        else
+          echo "::set-output name=hasError::true"
+          echo "Error!!"
+        fi
 
     - name: If Changes
       if: steps.has-changes.outputs.hasChanges == 'true'
@@ -59,6 +68,43 @@ jobs:
       run: |
         echo "No Changes!!"
         echo "${{ steps.has-changes.outputs.hasChanges }}"
+
+    - name: Test Ok
+      if: steps.tests.outputs.hasError == 'false'
+      run: |
+        echo "Test Ok!!"
+        echo "${{ steps.tests.outputs.hasError }}"
+
+    - name: Test fail!!
+      if: steps.tests.outputs.hasError == 'true'
+      run: |
+        echo "No Changes!!"
+        echo "${{ steps.tests.outputs.hasError }}"
+
+    - name: Configure user
+      if: steps.has-changes.outputs.hasChanges == 'true'
+      run: |
+        git config --global user.email ${{ secrets.GIT_USER_EMAIL }}
+        git config --global user.name ${{ secrets.GIT_USER_NAME }}
+
+    - name: Create new Branch
+      if: steps.tests.outputs.hasError == 'true'
+      run: |
+        hub switch -c "3rd-party-bot/run-${{ github.run_id }}-${{ github.run_number }}" origin/main
+        hub add .
+        hub commit -m "Chore: Update 3rd party data"
+        hub push -u origin "3rd-party-bot/run-${{ github.run_id }}-${{ github.run_number }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+
+    - name: Create pull request
+      if: steps.tests.outputs.hasError == 'true'
+      run: |
+        hub pull-request -m "Chore: Update 3rd party data"
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+
+
     # if hub diff --quiet; then
     #   echo "Changes!!"
     # else
