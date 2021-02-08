@@ -57,6 +57,13 @@ const skipArgument = (argument: string) => {
     };
 };
 
+export const skipIfCI = (ctx: Context) => {
+    return ctx.argv.ci ?
+        `Skipping in CI` :
+        '';
+};
+
+
 export const skipIfForced = skipArgument('force');
 export const skipIfJustRelease = skipArgument('justRelease');
 export const skipIfTestMode = skipArgument('testMode');

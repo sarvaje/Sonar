@@ -1,0 +1,26 @@
+parameters:
+  name: ''
+  condition: ''
+
+jobs:
+- job: ${{ parameters.name }}
+  pool:
+    vmImage: 'ubuntu-latest'
+  strategy:
+    matrix:
+      node_12_x:
+        node_version: 12.x
+  steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: $(node_version)
+    - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@2
+      displayName: 'Use Yarn 1.x'
+      inputs:
+        checkLatest: true
+    - script: yarn
+      displayName: 'Install dependencies'
+    - script: npm run release -- --dryRun --ci
+      displayName: 'Release script'
+  timeoutInMinutes: 120
+  condition: ${{ parameters.condition }}

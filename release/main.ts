@@ -5,7 +5,7 @@
 import * as Listr from 'listr';
 import { Arguments } from 'yargs';
 
-import { skipReasons, skipInstallation, skipIfAborted, skipIfError, skipIfForced, skipIfJustRelease, skipIfSameVersion, skipIfTestMode, skipIfSkipVsce } from './lib/skippers';
+import { skipReasons, skipInstallation, skipIfAborted, skipIfError, skipIfForced, skipIfJustRelease, skipIfSameVersion, skipIfTestMode, skipIfSkipVsce, skipIfCI } from './lib/skippers';
 import { taskErrorWrapper } from './lib/utils';
 import { updateChangelogs } from './tasks/update-changelogs';
 import { argv } from './lib/yargs-config';
@@ -93,7 +93,7 @@ const tasks = new Listr([
     },
     {
         title: 'Validate changes',
-        skip: skipReasons(skipIfError, skipIfForced, skipIfJustRelease),
+        skip: skipReasons(skipIfError, skipIfForced, skipIfJustRelease, skipIfCI),
         task: taskErrorWrapper(validateChanges)
     },
     {
@@ -103,37 +103,40 @@ const tasks = new Listr([
     },
     {
         title: 'Confirm npm publishing',
-        skip: skipReasons(skipIfError, skipIfAborted, skipIfForced, skipIfTestMode),
+        skip: skipReasons(skipIfError, skipIfAborted, skipIfForced, skipIfTestMode, skipIfCI),
         task: confirmRelease
     },
     {
+        // TODO: Remove skipIfCI after a few tests
         title: 'Publish on npm',
-        skip: skipReasons(skipIfError, skipIfAborted, skipIfTestMode),
+        skip: skipReasons(skipIfError, skipIfAborted, skipIfTestMode, skipIfCI),
         task: release()
     },
     {
+        // TODO: Remove skipIfCI once everything is tested
         title: 'Publish extension on Visual Studio Marketplace',
-        skip: skipReasons(skipIfError, skipIfAborted, skipIfSkipVsce, skipIfSameVersion('vscode-webhint'), skipIfTestMode),
+        skip: skipReasons(skipIfError, skipIfAborted, skipIfSkipVsce, skipIfSameVersion('vscode-webhint'), skipIfTestMode, skipIfCI),
         task: releaseForVSCode
     },
     {
+        // TODO: Remove skipIfCI once everything is tested
         title: 'Publish extension on Open VSX',
-        skip: skipReasons(skipIfError, skipIfAborted, skipIfSkipVsce, skipIfSameVersion('vscode-webhint'), skipIfTestMode),
+        skip: skipReasons(skipIfError, skipIfAborted, skipIfSkipVsce, skipIfSameVersion('vscode-webhint'), skipIfTestMode, skipIfCI),
         task: releaseForOVSX
     },
     {
         title: 'Submit extension-browser for Chrome',
-        skip: skipReasons(skipIfError, skipIfAborted, skipIfSameVersion('@hint/extension-browser'), skipIfTestMode),
+        skip: skipReasons(skipIfError, skipIfAborted, skipIfSameVersion('@hint/extension-browser'), skipIfTestMode, skipIfCI),
         task: releaseForBrowser('https://chrome.google.com/webstore/developer/dashboard')
     },
     {
         title: 'Submit extension-browser for Edge (Chromium)',
-        skip: skipReasons(skipIfError, skipIfAborted, skipIfSameVersion('@hint/extension-browser'), skipIfTestMode),
+        skip: skipReasons(skipIfError, skipIfAborted, skipIfSameVersion('@hint/extension-browser'), skipIfTestMode, skipIfCI),
         task: releaseForBrowser('https://partner.microsoft.com/en-us/dashboard/microsoftedge/')
     },
     {
         title: 'Submit extension-browser for Firefox',
-        skip: skipReasons(skipIfError, skipIfAborted, skipIfSameVersion('@hint/extension-browser'), skipIfTestMode),
+        skip: skipReasons(skipIfError, skipIfAborted, skipIfSameVersion('@hint/extension-browser'), skipIfTestMode, skipIfCI),
         task: releaseForBrowser('https://addons.mozilla.org/en-US/developers/addons')
     },
     {

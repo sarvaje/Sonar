@@ -44,6 +44,7 @@ export type Package = {
 }
 
 export type Parameters = {
+    ci: boolean;
     dryRun: boolean;
     force: boolean;
     help: boolean;
